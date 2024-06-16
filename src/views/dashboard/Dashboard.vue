@@ -51,7 +51,7 @@
 							/>
 						</CRow>
 					</CCardBody>
-					<CCardFooter>
+					<!-- <CCardFooter>
 						<CRow
 							:xs="{ cols: 1, gutter: 4 }"
 							:sm="{ cols: 2 }"
@@ -111,7 +111,7 @@
 								<CProgress class="mt-2" :value="40" thin :precision="1" />
 							</CCol>
 						</CRow>
-					</CCardFooter>
+					</CCardFooter> -->
 				</CCard>
 			</CCol>
 		</CRow>
@@ -228,3 +228,4 @@
 		</CRow>
 	</div>
 </template>
+

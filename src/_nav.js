@@ -1,7 +1,7 @@
 export default [
   {
     component: 'CNavItem',
-    name: 'Dashboard',
+    name: 'Статистика',
     to: '/dashboard',
     icon: 'cil-speedometer',
     badge: {
@@ -15,14 +15,14 @@ export default [
   },
   {
     component: 'CNavItem',
-    name: 'Colors',
-    to: '/theme/colors',
-    icon: 'cil-drop',
+    name: 'Уведомления',
+    to: '/dashboard',
+    icon: 'cil-bell',
   },
   {
     component: 'CNavItem',
-    name: 'Typography',
-    to: '/theme/typography',
+    name: 'Задачи',
+    to: '/dashboard',
     icon: 'cil-pencil',
   },
   {
@@ -119,34 +119,7 @@ export default [
     to: '/icons',
     icon: 'cil-star',
   },
-  {
-    component: 'CNavGroup',
-    name: 'Notifications',
-    to: '/notifications',
-    icon: 'cil-bell',
-    items: [
-      {
-        component: 'CNavItem',
-        name: 'Alerts',
-        to: '/notifications/alerts',
-      },
-      {
-        component: 'CNavItem',
-        name: 'Badges',
-        to: '/notifications/badges',
-      },
-      {
-        component: 'CNavItem',
-        name: 'Modals',
-        to: '/notifications/modals',
-      },
-      {
-        component: 'CNavItem',
-        name: 'Toasts',
-        to: '/notifications/toasts',
-      },
-    ],
-  },
+
   {
     component: 'CNavItem',
     name: 'Widgets',

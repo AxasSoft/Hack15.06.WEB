@@ -2,74 +2,13 @@
 	import { onMounted, ref } from "vue";
 	import { CChart } from "@coreui/vue-chartjs";
 	import { getStyle } from "@coreui/utils";
+	import axios from "axios";
 
 	const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 	const mainChartRef = ref();
-	const data = {
-		labels: [
-			"January",
-			"February",
-			"March",
-			"April",
-			"May",
-			"June",
-			"July",
-			"March",
-			"April",
-			"May",
-			"June",
-			"July",
-		],
-		datasets: [
-			{
-				label: "Рабочие с средствами защиты",
-				backgroundColor: `rgba(${getStyle("--cui-info-rgb")}, .1)`,
-				borderColor: getStyle("--cui-info"),
-				pointHoverBackgroundColor: getStyle("--cui-info"),
-				borderWidth: 2,
-				data: [
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-				],
-				fill: true,
-			},
-			{
-				label: "Рабочие без средств защиты",
-				backgroundColor: "transparent",
-				borderColor: getStyle("--cui-success"),
-				pointHoverBackgroundColor: getStyle("--cui-success"),
-				borderWidth: 2,
-				data: [
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-					random(0, 4),
-				],
-			},
-			{
-				label: "Норма рабочих на объекте",
-				backgroundColor: "transparent",
-				borderColor: getStyle("--cui-danger"),
-				pointHoverBackgroundColor: getStyle("--cui-danger"),
-				borderWidth: 1,
-				borderDash: [8, 5],
-				data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-			},
-		],
-	};
+
+	import { nextTick } from "vue";
 
 	const options = {
 		maintainAspectRatio: false,
@@ -143,5 +82,115 @@
 </script>
 
 <template>
-	<CChart type="line" :data="data" :options="options" ref="mainChartRef" />
+	<CChart
+		type="line"
+		v-if="renderComponent"
+		:key="data.labels.length"
+		:data="data"
+		:options="options"
+		ref="mainChartRef"
+	/>
 </template>
+<script>
+	export default {
+		data() {
+			return {
+				renderComponent: true,
+				random: (min, max) => Math.floor(Math.random() * (max - min + 1) + min),
+				data: {
+					labels: [],
+					datasets: [
+						{
+							label: "Рабочие с средствами защиты",
+							backgroundColor: `rgba(${getStyle("--cui-info-rgb")}, .1)`,
+							borderColor: getStyle("--cui-info"),
+							pointHoverBackgroundColor: getStyle("--cui-info"),
+							borderWidth: 2,
+							data: [
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+							],
+							fill: true,
+						},
+						{
+							label: "Рабочие без средств защиты",
+							backgroundColor: "transparent",
+							borderColor: getStyle("--cui-success"),
+							pointHoverBackgroundColor: getStyle("--cui-success"),
+							borderWidth: 2,
+							data: [
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+								// random(0, 4),
+							],
+						},
+						{
+							label: "Норма рабочих на объекте",
+							backgroundColor: "transparent",
+							borderColor: getStyle("--cui-danger"),
+							pointHoverBackgroundColor: getStyle("--cui-danger"),
+							borderWidth: 1,
+							borderDash: [8, 5],
+							data: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+						},
+					],
+				},
+			};
+		},
+		mounted: function () {
+			this.todo();
+		},
+
+		methods: {
+			todo: function () {
+				this.intervalid1 = setInterval(
+					function () {
+						this.getData();
+					}.bind(this),
+					3000
+				);
+			},
+			getData() {
+				axios
+					.get("http://10.2.0.168:8000/data/?q=1")
+					.then((response) => {
+						console.log(response);
+						if (this.data.labels.length % 10 === 0) {
+							this.data.labels.push(new Date().toLocaleTimeString());
+						} else {
+							this.data.labels.push("");
+						}
+						this.data.datasets[0].data.push(response.data[0].person_count);
+						this.data.datasets[2].data.push(3);
+
+						console.log(data.labels);
+						console.log("data.labels");
+					})
+					.catch((error) => {});
+				this.forceRerender();
+			},
+			forceRerender() {
+				// Remove my-component from the DOM
+				this.renderComponent = false;
+
+				this.$nextTick(() => {
+					// Add the component back in
+					this.renderComponent = true;
+				});
+			},
+		},
+	};
+</script>
